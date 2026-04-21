@@ -41,6 +41,31 @@ This section presents a minimal instantiation of the TAINT protocol; specific co
 
 The protocol has four phases: commitment (claimer commits a secret), embedding (claimer propagates the derived flag into a target artifact), funding (rewarders stake funds on a specific artifact), and claim (claimer proves flag inclusion).
 
+```mermaid
+sequenceDiagram
+    autonumber
+    actor C as Claimer
+    participant K as Contract
+    actor R as Rewarder
+    participant A as Artifact
+
+    C->>C: pick submitterRandom
+    C->>K: submit H(submitterRandom)
+    K->>K: bind contract randomness to claimer address
+    K-->>C: randomness
+
+    C->>C: flag = H(randomness ‖ submitterRandom ... )
+    C->>A: cause flag to appear in scoped region
+
+    R->>A: compute artifact root over scope
+    R->>K: deposit reward against artifact root
+
+    C->>A: locates flag and computes inclusion proof
+    C->>K: claim by revealing submitterRandom and proof
+    K->>K: verify commitment, proof, and recomputed flag
+    K-->>C: pay reward
+```
+
 ### 2.2 Commit and Flag Derivation
 
 The claimer selects a random secret `submitterRandom` and submits `commitmentHash` to the contract, where `commitmentHash = H(submitterRandom)` and `H` is a cryptographic secure collision-resistant hash function producing at least a 256-bit digest (e.g., Keccak-256). The contract records the commitment along with the committer's blockchain `address` or public key, binding the commitment to its creator.

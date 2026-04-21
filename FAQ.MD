@@ -29,7 +29,7 @@ The concern worth taking seriously is a subtler one: a maintainer who hides thei
 
 ### Couldn't a claimer just grind a hash to match bytes already in the artifact?
 
-This is the preimage-grinding attack, and it's the central security analysis in the paper ([security.4](docs/paper/security.md#4-preimage-grinding)).
+This is the preimage-grinding attack, and it's the central security analysis in the documentation ([security.4](docs/security.md#4-preimage-grinding)).
 
 This is also why the protocol commits to randomness *before* the claimer knows it: a claimer who could choose `randomness` after seeing the artifact could grind directly. The commit-then-reveal sequence forces the search to happen in the wrong direction (find an artifact that matches a fixed flag), which is the hard one.
 
